@@ -1,0 +1,10 @@
+{
+  "extends": "../../nextjs/tsconfig.json",
+  "include": ["./*.ts"],
+  "compilerOptions": {
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "incremental": false
+  }
+}
