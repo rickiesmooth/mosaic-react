@@ -2,13 +2,12 @@
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { menu as createMenu } from "./Menu";
 import { useMosaic } from "./useMosaic";
-// @ts-ignore
 import { MosaicClient } from "@uwdata/mosaic-core";
 
 type Option = { value: string }
 
 export function useMenu(options: any) {
-  const menu = useRef<MosaicClient>(null);
+  const menu = useRef<MosaicClient | null>(null);
   const [selectedValue, setSelectedValue] = useState(
     options.value || (options && options[0] && options[0].value) || ""
   );

@@ -1,14 +1,37 @@
-// @ts-nocheck
 import { MosaicClient, isParam, isSelection } from "@uwdata/mosaic-core";
 import { Query, eq, literal } from "@uwdata/mosaic-sql";
 import { input } from "./input";
 
-const isObject = v => {
-  return v && typeof v === 'object' && !Array.isArray(v);
+const isObject = (v: unknown) => {
+  return v && typeof v === "object" && !Array.isArray(v);
+};
+
+export type MenuOptions = {
+  filterBy: string;
+  from: string;
+  column: string;
+  format?: (value: unknown) => string;
+  options?: unknown[];
+  as: any;
+  onUpdate: (data: unknown) => void;
 };
 
 export class Menu extends MosaicClient {
-  constructor({ filterBy, from, column, format, options, as, onUpdate }) {
+  from: string;
+  column: string;
+  selection: any;
+  format?: (value: unknown) => string;
+  onUpdate: (arg: any) => any;
+  data: any[];
+  constructor({
+    filterBy,
+    from,
+    column,
+    format,
+    options,
+    as,
+    onUpdate,
+  } = {} as MenuOptions) {
     super(filterBy);
     this.from = from;
     this.column = column;
@@ -22,10 +45,10 @@ export class Menu extends MosaicClient {
   }
 
   reset() {
-    handleSelectChange({ target: { value: "" } });
+    this.onUpdate({ target: { value: "" } });
   }
 
-  publish(value) {
+  publish(value: string) {
     const { selection, column } = this;
     if (isSelection(selection)) {
       selection.update({
@@ -39,7 +62,7 @@ export class Menu extends MosaicClient {
     }
   }
 
-  query(filter = []) {
+  query(filter = []): typeof Query | null {
     const { from, column } = this;
     if (!from) return null;
     return Query.from(from)
@@ -49,17 +72,17 @@ export class Menu extends MosaicClient {
       .orderby(column);
   }
 
-  queryResult(data) {
+  queryResult(data: unknown[]) {
     this.data = [{ value: "", label: "All" }, ...data];
     return this;
   }
 
   update() {
-    const { data, format, select } = this;
-    this.onUpdate({ data, format, select });
+    const { data, format } = this;
+    this.onUpdate({ data, format });
 
     return this;
   }
 }
 
-export const menu = (options) => input(Menu, options);
+export const menu = (options: any) => input(Menu, options);

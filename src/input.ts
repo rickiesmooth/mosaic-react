@@ -1,4 +1,3 @@
-// @ts-ignore
 import { coordinator } from '@uwdata/vgplot';
 
 export function input(InputClass: any, options: any) {

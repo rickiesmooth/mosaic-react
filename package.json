@@ -30,12 +30,41 @@
     },
     "scripts": {
         "build": "tsup",
-        "copy-next": "cp -r dist/public/*.js ../../public",
         "dev": "tsup --watch"
     },
-    "devDependencies": {
+    "tsup": {
+        "entry": [
+            "src/index.ts"
+        ],
+        "treeshake": true,
+        "sourcemap": true,
+        "minify": false,
+        "clean": true,
+        "dts": true,
+        "splitting": false,
+        "format": [
+            "cjs",
+            "esm"
+        ],
+        "external": [
+            "react"
+        ]
+    },
+    "dependencies": {
+        "@duckdb/duckdb-wasm": "^1.27.0",
+        "@duckdb/react-duckdb": "^1.27.0",
         "@swc/core": "^1.3.66",
         "@types/node": "^20.3.1",
-        "tsup": "7.1.0"
+        "@types/react": "^18.2.25",
+        "@uwdata/mosaic-core": "^0.3.4",
+        "@uwdata/mosaic-sql": "^0.3.4",
+        "@uwdata/vgplot": "^0.3.4",
+        "react": "^16.8.0",
+        "tsup": "7.2.0",
+        "typescript": "^5.2.2"
+    },
+    "peerDependencies": {
+        "react": ">=17",
+        "react-dom": ">=17"
     }
 }

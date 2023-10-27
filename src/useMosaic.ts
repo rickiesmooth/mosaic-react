@@ -6,9 +6,8 @@ import {
   useDuckDBConnectionDialer,
 } from "@duckdb/react-duckdb";
 import { AsyncDuckDB, AsyncDuckDBConnection } from "@duckdb/duckdb-wasm";
-// @ts-ignore
 import * as vg from "@uwdata/vgplot";
-import { data } from "./data/stocks-csv";
+// import { data } from "../data/stocks-csv";
 
 export function wasmConnector(
   db: AsyncDuckDB | null,
@@ -29,7 +28,7 @@ export function wasmConnector(
   };
 }
 
-export function useMosaic() {
+export function useMosaic(initFunction?: (db: ReturnType<typeof useDuckDB>, vg: any) => Promise<void>) {
   const [isConnected, setIsConnected] = useState(false);
   const connDialerCallback = useDuckDBConnectionDialer();
   const conn = useDuckDBConnection();
@@ -39,9 +38,9 @@ export function useMosaic() {
   const setupConnection = useCallback(async () => {
     const wasm = wasmConnector(db?.value, conn);
     await vg.coordinator().databaseConnector(wasm);
-    await db.value?.registerFileText(`stock-data.csv`, data);
-    await vg.coordinator().exec(vg.loadCSV("stocks", "stock-data.csv"));
-
+    if (initFunction) {
+      await initFunction(db, vg);
+    }
     setIsConnected(true);
   }, [db, conn]);
 
