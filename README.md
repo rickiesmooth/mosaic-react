@@ -2,7 +2,7 @@
 
 ## example
 
-```typescript
+```jsx
 
   const { containerRef } = useChart({
     plot: [
